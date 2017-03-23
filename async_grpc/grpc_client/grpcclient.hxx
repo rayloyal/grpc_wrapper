@@ -1,7 +1,6 @@
 #ifndef _GRPC_CLIENT_hxx
 #define _GRPC_CLIENT_hxx
 
-
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -148,29 +147,6 @@ private:
 			ClientCallMethod * cm = static_cast<ClientCallMethod*>(got_tag);
 			process(cm);
 		}
-
-/*
-		void* got_tag;
-		bool ok = false;
-
-		for (;;) 
-		{
-			auto r =
-				mCompletionQueue.AsyncNext(&got_tag, &ok, gpr_time_0(GPR_CLOCK_REALTIME));
-			if (r == CompletionQueue::TIMEOUT) continue;
-			if (r == CompletionQueue::GOT_EVENT)
-			{
-				ClientCallMethod * cm = static_cast<ClientCallMethod*>(got_tag);
-				process(cm);
-			}
-			else
-			{
-				gpr_log(GPR_ERROR, "unexpected result from AsyncNext");
-				abort();
-			}
-		}
-*/
-
 	}
 
 	virtual void process(ClientCallMethod * cm)
@@ -184,8 +160,6 @@ private:
 	bool mShutdown;
 	std::list<std::shared_ptr<std::thread>> mThreads;
 };
-
-
 
 
 template<typename TSERVICE, typename TSERVICESUB>
@@ -216,8 +190,6 @@ public:
 				serverAddr, grpc::InsecureChannelCredentials()));
 		}
 	}
-
-
 
 protected:
 
@@ -251,8 +223,4 @@ private:
 	}
 
 };
-
-
-
 #endif
-
