@@ -18,7 +18,6 @@ using grpc::ClientContext;
 using grpc::CompletionQueue;
 using grpc::Status;
 
-
 class ClientCallMethod;
 
 class callbackHandler
@@ -43,11 +42,7 @@ public:
 
 	const std::string & callMethodName() { return mMethodName; }
 	callbackHandler * cbHandler() { return mCallbackHandler; }
-
-protected:
-
 private:
-	
 	std::string mMethodName;
 	callbackHandler * mCallbackHandler;
 };
@@ -58,7 +53,6 @@ template<typename TREQUEST, typename TREPLY>
 class ClientCallData : public ClientCallMethod
 {
 public:
-
 	ClientCallData(callbackHandler * handler, const std::string & methodName, uint32_t delalineSeconds) :ClientCallMethod(handler, methodName)
 	{
 		std::chrono::system_clock::time_point deadline =
@@ -66,18 +60,13 @@ public:
 
 		mContext.set_deadline(deadline);
 	}
-
 	Status & rpcStatus() { return mRpcStatus; }
-
 	TREPLY & reply() { return mReply; }
 	ClientContext & context() { return mContext; }
 	std::unique_ptr<ClientAsyncResponseReader<TREPLY>> & responderReader() { return mResponseReader; }
-
 private:
-
 	TREPLY mReply;
 	ClientContext mContext;
-
 	Status mRpcStatus;
 	std::unique_ptr<ClientAsyncResponseReader<TREPLY>> mResponseReader;
 };
@@ -96,7 +85,6 @@ public:
 			it->join();
 		}
 	}
-
 	void shutdown()
 	{
 		if (!mShutdown)
@@ -105,8 +93,6 @@ public:
 			mShutdown = true;
 		}
 	}
-
-
 	bool run(uint32_t threads)
 	{
 		if (threads == 0)
@@ -125,14 +111,9 @@ public:
 	}
 
 	CompletionQueue & cq() { return mCompletionQueue; }
-
-
 protected:
-
 	CompletionQueue mCompletionQueue;
-
 private:
-
 	void asyncCompleteRpc()
 	{
 		void* got_tag;
@@ -148,20 +129,15 @@ private:
 			process(cm);
 		}
 	}
-
 	virtual void process(ClientCallMethod * cm)
 	{
 		callbackHandler * cb = cm->cbHandler();
 		cb->onMessage(cm);
 	}
-
 private:
-
 	bool mShutdown;
 	std::list<std::shared_ptr<std::thread>> mThreads;
 };
-
-
 template<typename TSERVICE, typename TSERVICESUB>
 class GrpcConnection : public callbackHandler
 {
@@ -192,13 +168,11 @@ public:
 	}
 
 protected:
-
 	uint32_t mDeadline;
 	CompletionQueue * mCompletionQueue;
 	std::unique_ptr<TSERVICESUB> mStub;
 
 private:
-
 	bool getFileContents(const std::string & fileName, std::string & contents)
 	{
 		try
@@ -216,11 +190,8 @@ private:
 		}
 		catch (...)
 		{
-
 		}
-
 		return false;
 	}
-
 };
 #endif
